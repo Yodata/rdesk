@@ -1,0 +1,33 @@
+{
+  "author": {
+    "name": "Brian Shamblen",
+    "email": "brian@shamblen.com",
+    "url": "http://github.com/bshamblen"
+  },
+  "main": "lib/index.js",
+  "name": "rdesk",
+  "description": "A client for the Real Estate Digital rDesk API.",
+  "repository": {
+    "url": "https://github.com/yodata/rdesk",
+    "type": "git"
+  },
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+    "bluebird": "3.4.6",
+    "request": "2.75.0",
+    "underscore": "1.8.3"
+  },
+  "devDependencies": {
+    "jshint": "2.9.3",
+    "mocha": "3.1.2",
+    "chai": "3.5.0"
+  },
+  "engines": {
+    "node": ">=4.6.0"
+  },
+  "scripts": {
+    "test": "make tests"
+  },
+  "license": "MIT"
+}
