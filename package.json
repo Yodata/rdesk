@@ -21,7 +21,8 @@
   "devDependencies": {
     "jshint": "2.9.3",
     "mocha": "3.1.2",
-    "chai": "3.5.0"
+    "chai": "3.5.0",
+    "moment": "2.15.1"
   },
   "engines": {
     "node": ">=4.6.0"
