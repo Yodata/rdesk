@@ -83,6 +83,20 @@ client.getContacts(params, function(err, res) {
 });
 ```
 
+#### getContact(contactKey, callback)
+
+Retrieves a single contact, using the specified `contactKey`.
+
+```javascript
+client.getContact(contactKey, function(err, res) {
+	if (err) {
+		return console.error(err);
+    }
+
+	console.log(JSON.stringify(res, null, 4));
+});
+```
+
 #### getContactAddresses(contactKey, *[params]*, callback)
 
 Retrieves the list of addresses for a specific contact. You may limit the results by using either the `createdAfter` or `modifiedAfter` parameter.

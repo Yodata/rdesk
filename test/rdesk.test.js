@@ -87,6 +87,41 @@ describe('rdesk', function() {
 	    .catch(done);	
 	});
 
+	it('getContact, using promise', function(done) {
+		this.timeout(30000);
+		const rd = new rdesk(rdeskOptions);
+		assert.ok(rd.apiKey);
+		assert.ok(!rd.isLoggedIn());
+
+		const createDate = moment().subtract(4, 'days').toISOString();
+
+		rd.getContacts({createdAfter: createDate})
+	    .then(function(res) {
+	    	assert.ok(res);
+	    	return _.map(res, function(contact) {
+	    		return rd.getContact(contact.contactKey);
+	    	});
+	    })
+	    .then(function(res) {
+	    	assert.ok(res);
+	    	assert.isArray(res);
+
+	    	Promise.all(res)
+	    	.then(function(list) {
+	    		assert.ok(!_.isEmpty(list), 'no contacts returned, extend test period');
+
+	    		list.forEach(function(contact) {
+	    			assert.ok(contact.contactKey);
+	    			assert.ok(contact.timestampEntered);
+	    		});
+
+	    		done();
+	    	})
+	    	.catch(done);
+	    })
+	    .catch(done);	
+	});
+
 	it('getContactAddresses, using promise', function(done) {
 		this.timeout(30000);
 		const rd = new rdesk(rdeskOptions);
