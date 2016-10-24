@@ -4,6 +4,8 @@ const moment = require('moment');
 const _ = require('underscore');
 
 describe('rdesk', function() {
+	this.timeout(30000);
+
 	const rdeskOptions = {
 		apiKey: process.env.RDESK_API_KEY,
 		username: process.env.RDESK_USERNAME,
@@ -51,6 +53,73 @@ describe('rdesk', function() {
 		});
 	});
 
+	it('getContacts created in the last 30 days, using stream callback', function(done) {
+		const rd = new rdesk(rdeskOptions);
+		assert.ok(rd.apiKey);
+		assert.ok(!rd.isLoggedIn());
+
+		const createDate = moment().subtract(30, 'days').toISOString();
+
+		rd.getContacts({createdAfter: createDate, stream: true}, function(err, stream) {
+			assert.isUndefined(err);
+			assert.ok(stream);
+
+			var counter = 0;
+
+			stream.on('data', function(contact) {
+				counter++;
+				//console.log(counter, contact);
+			});
+
+			stream.on('error', function(err) {
+				stream.isUndefined(err);
+				rd.logout();
+				done();
+			});
+
+			stream.on('end', function() {
+				//console.log('processed ' + counter + ' contacts');
+				assert.notEqual(counter, 0);
+				rd.logout();
+				done();
+			});
+		});	
+	});
+
+	it('getContacts created in the last 30 days, using stream promise', function(done) {
+		const rd = new rdesk(rdeskOptions);
+		assert.ok(rd.apiKey);
+		assert.ok(!rd.isLoggedIn());
+
+		const createDate = moment().subtract(30, 'days').toISOString();
+
+		rd.getContacts({createdAfter: createDate, stream: true})
+		.then(function(stream) {
+			assert.ok(stream);
+
+			var counter = 0;
+
+			stream.on('data', function(contact) {
+				counter++;
+				//console.log(counter, contact);
+			});
+
+			stream.on('error', function(err) {
+				stream.isUndefined(err);
+				rd.logout();
+				done();
+			});
+
+			stream.on('end', function() {
+				//console.log('processed ' + counter + ' contacts');
+				assert.notEqual(counter, 0);
+				rd.logout();
+				done();
+			});
+		})
+		.catch(done);	
+	});
+
 	it('getContacts created in the last 24 hours, using callback', function(done) {
 		const rd = new rdesk(rdeskOptions);
 		assert.ok(rd.apiKey);
@@ -88,7 +157,6 @@ describe('rdesk', function() {
 	});
 
 	it('getContact, using promise', function(done) {
-		this.timeout(30000);
 		const rd = new rdesk(rdeskOptions);
 		assert.ok(rd.apiKey);
 		assert.ok(!rd.isLoggedIn());
@@ -123,7 +191,6 @@ describe('rdesk', function() {
 	});
 
 	it('getContactAddresses, using promise', function(done) {
-		this.timeout(30000);
 		const rd = new rdesk(rdeskOptions);
 		assert.ok(rd.apiKey);
 		assert.ok(!rd.isLoggedIn());
@@ -161,7 +228,6 @@ describe('rdesk', function() {
 	});
 
 	it('getContactAssignments, using promise', function(done) {
-		this.timeout(30000);
 		const rd = new rdesk(rdeskOptions);
 		assert.ok(rd.apiKey);
 		assert.ok(!rd.isLoggedIn());
@@ -199,7 +265,6 @@ describe('rdesk', function() {
 	});
 
 	it('getContactEmailAddresses, using promise', function(done) {
-		this.timeout(30000);
 		const rd = new rdesk(rdeskOptions);
 		assert.ok(rd.apiKey);
 		assert.ok(!rd.isLoggedIn());
@@ -239,7 +304,6 @@ describe('rdesk', function() {
 	});
 
 	it('getContactGroups, using promise', function(done) {
-		this.timeout(30000);
 		const rd = new rdesk(rdeskOptions);
 		assert.ok(rd.apiKey);
 		assert.ok(!rd.isLoggedIn());
@@ -278,7 +342,6 @@ describe('rdesk', function() {
 	});
 
 	it('getContactHistoryEvents, using promise', function(done) {
-		this.timeout(30000);
 		const rd = new rdesk(rdeskOptions);
 		assert.ok(rd.apiKey);
 		assert.ok(!rd.isLoggedIn());
@@ -317,7 +380,6 @@ describe('rdesk', function() {
 	});
 
 	it('getContactLeadSources, using promise', function(done) {
-		this.timeout(30000);
 		const rd = new rdesk(rdeskOptions);
 		assert.ok(rd.apiKey);
 		assert.ok(!rd.isLoggedIn());
@@ -356,7 +418,6 @@ describe('rdesk', function() {
 	});
 
 	it('getContactNotes, using promise', function(done) {
-		this.timeout(30000);
 		const rd = new rdesk(rdeskOptions);
 		assert.ok(rd.apiKey);
 		assert.ok(!rd.isLoggedIn());
@@ -395,7 +456,6 @@ describe('rdesk', function() {
 	});
 
 	it('getContactPhoneNumbers, using promise', function(done) {
-		this.timeout(30000);
 		const rd = new rdesk(rdeskOptions);
 		assert.ok(rd.apiKey);
 		assert.ok(!rd.isLoggedIn());
@@ -434,7 +494,6 @@ describe('rdesk', function() {
 	});
 
 	it('getMembers, all of them, using promise', function(done) {
-		this.timeout(30000);
 		const rd = new rdesk(rdeskOptions);
 		assert.ok(rd.apiKey);
 		assert.ok(!rd.isLoggedIn());
@@ -454,7 +513,6 @@ describe('rdesk', function() {
 	});
 
 	it('getOffices, all of them, using promise', function(done) {
-		this.timeout(30000);
 		const rd = new rdesk(rdeskOptions);
 		assert.ok(rd.apiKey);
 		assert.ok(!rd.isLoggedIn());
