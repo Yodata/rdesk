@@ -223,6 +223,20 @@ client.getMembers(function(err, res) {
 });
 ```
 
+#### getMember(memberKey, callback)
+
+Retrieves a single member record. 
+
+```javascript
+client.getMember(someMemberKey, function(err, member) {
+	if (err) {
+		return console.error(err);
+    }
+
+	console.log(JSON.stringify(member, null, 4));
+});
+```
+
 #### getOffices(callback)
 
 Retrieves the list of all offices the currenty authenticated user has access to view.
@@ -234,6 +248,20 @@ client.getOffices(function(err, res) {
     }
 
 	console.log(JSON.stringify(res, null, 4));
+});
+```
+
+#### getOffice(officeKey, callback)
+
+Retrieves a single office record.
+
+```javascript
+client.getOffice(someOfficeKey, function(err, office) {
+	if (err) {
+		return console.error(err);
+    }
+
+	console.log(JSON.stringify(office, null, 4));
 });
 ```
 

@@ -5,6 +5,8 @@ const _ = require('underscore');
 
 describe('rdesk', function() {
 	this.timeout(30000);
+	let firstMemberKey;
+	let firstOfficeKey;
 
 	const rdeskOptions = {
 		apiKey: process.env.RDESK_API_KEY,
@@ -505,8 +507,28 @@ describe('rdesk', function() {
     		res.forEach(function(member) {
 				assert.ok(member.memberKey);
 				assert.ok(member.timestampEntered);
+
+				if (!firstMemberKey) {
+					firstMemberKey = member.memberKey;
+				}
     		});
 
+			done();
+	    })
+	    .catch(done);	
+	});
+
+	it('getMember, just one, using promise', function(done) {
+		const rd = new rdesk(rdeskOptions);
+		assert.ok(rd.apiKey);
+		assert.ok(!rd.isLoggedIn());
+		assert.ok(firstMemberKey);
+
+		rd.getMember(firstMemberKey)
+	    .then(function(member) {
+	    	assert.ok(!_.isEmpty(member), 'no member returned');
+			assert.ok(member.memberKey);
+			assert.ok(member.timestampEntered);
 			done();
 	    })
 	    .catch(done);	
@@ -525,8 +547,28 @@ describe('rdesk', function() {
     		res.forEach(function(office) {
 				assert.ok(office.officeKey);
 				assert.ok(office.timestampEntered);
+
+				if (!firstOfficeKey) {
+					firstOfficeKey = office.officeKey;
+				}
     		});
 
+			done();
+	    })
+	    .catch(done);	
+	});
+
+	it('getOffice, just one, using promise', function(done) {
+		const rd = new rdesk(rdeskOptions);
+		assert.ok(rd.apiKey);
+		assert.ok(!rd.isLoggedIn());
+		assert.ok(firstOfficeKey);
+
+		rd.getOffice(firstOfficeKey)
+	    .then(function(office) {
+	    	assert.ok(!_.isEmpty(office), 'no office returned');
+			assert.ok(office.officeKey);
+			assert.ok(office.timestampEntered);
 			done();
 	    })
 	    .catch(done);	
